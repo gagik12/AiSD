@@ -1,6 +1,13 @@
+/*            ВЫПОЛНИЛ ДОЛГАНОВ ВАДИМ НИКОЛАЕВИЧ
+                       ВАРИАНТ 21
+Строки текстового  файла  содержат  фамилии  студентов.
+Определить   порядковый   номер   байта,  начиная  с  которого
+располагается первая  по  алфавиту  фамилия.  Заменить  данную
+фамилию  в исходном файле символами '*',  не переписывая этого
+файла (8).*/
+
 #include "stdafx.h"
 
-static const char FILE_NAME[] = "file/surname.txt";
 static const char REPLACEMENT = '*';
 
 struct Surname
@@ -10,19 +17,19 @@ struct Surname
 	int amountChar;
 };
 
-FILE* OpenFile()
+FILE* OpenFile(std::string const& fileName) // Открыть файл
 {
 	FILE* file;
-	fopen_s(&file, FILE_NAME, "r+b");
+	fopen_s(&file, fileName.c_str(), "r+b");
 	return file;
 }
 
-int CompareStrings(std::string const& a, std::string const& b)
+int CompareStrings(std::string const& a, std::string const& b) // Сравнение строк
 {
 	return (strcmp(a.c_str(), b.c_str()));
 }
 
-std::string ReadSurname(FILE* const& file, long & positionCurr)
+std::string ReadSurname(FILE* const& file, long & positionCurr) // чтение фамилия из файла
 {
 	std::string str = "";
 	char ch;
@@ -41,16 +48,43 @@ void SaveInStructure(Surname & surname, std::string const& str1, long const& pos
 	surname.startBytes = position - str1.length();
 }
 
+std::string GetStringReplacement(std::string const& surname)
+{
+	std::string buf = "";
+	for (int i = 0; i != surname.length(); i++)	 
+	{
+		buf += REPLACEMENT;
+	}
+	return buf;
+
+}
+
+bool IsReplaced(std::string const& surname)
+{
+	 bool isReplaced = false;
+	 std::string replacement = GetStringReplacement(surname);
+	 if (CompareStrings(surname, replacement) == 0)
+	 {	
+		 isReplaced = true;	 
+		 
+	 }
+	 return isReplaced;
+}
+
 Surname SearchSurname(FILE* & file)
 {
 	long positionCurr;
 	std::string str1 = ReadSurname(file, positionCurr);
 	std::string str2 = "";
+	while (IsReplaced(str1))
+	{
+		str1 = ReadSurname(file, positionCurr);
+	}
 	long positionMaxSurname = positionCurr;
 	while (!feof(file))
 	{
 		str2 = ReadSurname(file, positionCurr);
-		if ((CompareStrings(str1, str2) > 0) && (str2 != "") || ((str1 == "") && (str2 != "")))
+		if (!IsReplaced(str2) && (CompareStrings(str1, str2) > 0) && (str2 != "") || ((str1 == "") && (str2 != "")))
 		{
 			str1 = str2;
 			positionMaxSurname = positionCurr;
@@ -61,19 +95,11 @@ Surname SearchSurname(FILE* & file)
 	return surname;
 }
 
-std::string GetStringReplacement(Surname const& surname)
-{
-	std::string buf = "";
-	for (int i = 0; i != surname.amountChar; i++)
-	{
-		buf += REPLACEMENT;
-	}
-	return buf;
-}
 
-void ReplaceWord(FILE* & file, Surname const& surname)
+
+void ReplaceWord(FILE* & file, Surname const& surname) // Заменить слова
 {
-	std::string replacement = GetStringReplacement(surname);
+	std::string replacement = GetStringReplacement(surname.word);
 	fseek(file, surname.startBytes, SEEK_SET);
 	fwrite(replacement.c_str(), surname.amountChar, 1, file);
 }
@@ -88,7 +114,16 @@ void OutputDataSurname(Surname const& surname)
 int main()
 {
 	setlocale(LC_ALL, "rus");
-	FILE * file = OpenFile();
+	std::cout << "Enter file name: ";
+	std::string fileName;
+	std::getline(std::cin, fileName);
+
+	if (fileName.length() == 0)
+	{
+		std::cout << "Empty file name: " << std::endl;
+		return 1;
+	}
+	FILE * file = OpenFile(fileName);
 	if (file != NULL)
 	{
 		Surname surname = SearchSurname(file);
