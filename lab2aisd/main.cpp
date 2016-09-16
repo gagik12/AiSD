@@ -56,6 +56,14 @@ string ReadWord(ifstream & inputFile, bool & isReadEof)
 	string word = "";
 	char ch;
 	inputFile.get(ch);
+	if (ch == '{')
+	{
+		while (ch != '}')
+		{
+			inputFile.get(ch);
+		}
+		
+	}
 	while (ch != ' ')
 	{
 		if ((ch == '\r') || (ch == '\n'))
