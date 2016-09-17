@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -9,7 +9,7 @@ using namespace std;
 struct stek
 {
 	string value;
-	struct stek *next; 
+	struct stek *next;
 };
 
 struct Operator
@@ -20,21 +20,21 @@ struct Operator
 
 void push(stek* &NEXT, const string & VALUE)
 {
-	stek *MyStack = new stek; 
-	MyStack->value = VALUE; 
-	MyStack->next = NEXT; 
-	NEXT = MyStack; 
+	stek *MyStack = new stek;
+	MyStack->value = VALUE;
+	MyStack->next = NEXT;
+	NEXT = MyStack;
 }
 
 string pop(stek* &NEXT)
-{ 
-	stek *MyStack = NEXT; 
+{
+	stek *MyStack = NEXT;
 	string temp = NEXT->value;
-						 
-	NEXT = NEXT->next; 
+
+	NEXT = NEXT->next;
 	delete MyStack;
-	std::cout << temp; 
-	return temp; 
+	std::cout << temp;
+	return temp;
 }
 
 vector<Operator> InitOperator()
@@ -45,24 +45,53 @@ vector<Operator> InitOperator()
 	structOperator.endOperator = "END";
 	opt.push_back(structOperator);
 
+	structOperator.beginOperator = "BEGIN";
+	structOperator.endOperator = "END;";
+	opt.push_back(structOperator);
+
+	structOperator.beginOperator = "BEGIN";
+	structOperator.endOperator = "END.";
+	opt.push_back(structOperator);
+
 	structOperator.beginOperator = "REPEAT";
 	structOperator.endOperator = "UNTIL";
 	opt.push_back(structOperator);
 	return opt;
 }
 
+
+
 string ReadWord(ifstream & inputFile, bool & isReadEof)
 {
 	string word = "";
 	char ch;
 	inputFile.get(ch);
+	if (ch == '/')
+	{
+		inputFile.get(ch);
+		if (ch == '/')
+		{
+			while (ch != '\n')
+			{
+				inputFile.get(ch);
+			}
+		}
+	}
 	if (ch == '{')
 	{
 		while (ch != '}')
 		{
 			inputFile.get(ch);
 		}
-		
+	}
+
+	if (ch == '\'')
+	{
+		inputFile.get(ch);
+		while (ch != '\'')
+		{
+			inputFile.get(ch);
+		}
 	}
 	while (ch != ' ')
 	{
@@ -106,14 +135,15 @@ int main()
 			if (CompareStrings(opt[i].beginOperator, word))
 			{
 				push(p, word);
-				cout << "YES\n";
+				cout << word << endl;
+				break;
 			}
 			else if (CompareStrings(opt[i].endOperator, word))
 			{
-				cout << "NO\n";
+				cout << word << endl;
 
 			}
-			
+
 		}
 	}
 	//push(p, "BEGIN");
