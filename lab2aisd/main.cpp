@@ -1,41 +1,28 @@
+/*           ДОЛГАНОВ ВАДИМ НИКОЛАЕВИЧ
+                   ВАРИАНТ 27
+Программа  на ПАСКАЛЕ включает такие сочетания ключевых
+слов,  как  REPEAT..UNTIL  и   BEGIN..END.   Некоторые   части
+программы  могут быть закомментированы,  а другая часть текста
+может представлять из себя константы в  апострофах.  Требуется
+проверить правильность вложенности данных конструкций с учетом
+допустимости взаимных вложений (11).*/
+
 
 #include <iostream>
 #include <string>
 #include <vector>
 #include <fstream>
+#include "stek.h"
+
 
 using namespace std;
 
-struct stek
-{
-	string value;
-	struct stek *next;
-};
 
 struct Operator
 {
 	string beginOperator;
 	string endOperator;
 };
-
-void push(stek* &NEXT, const string & VALUE)
-{
-	stek *MyStack = new stek;
-	MyStack->value = VALUE;
-	MyStack->next = NEXT;
-	NEXT = MyStack;
-}
-
-string pop(stek* &NEXT)
-{
-	stek *MyStack = NEXT;
-	string temp = NEXT->value;
-
-	NEXT = NEXT->next;
-	delete MyStack;
-	std::cout << temp;
-	return temp;
-}
 
 vector<Operator> InitOperator()
 {
@@ -59,13 +46,8 @@ vector<Operator> InitOperator()
 	return opt;
 }
 
-
-
-string ReadWord(ifstream & inputFile, bool & isReadEof)
+void HandlingExceptions(ifstream & inputFile, char ch)
 {
-	string word = "";
-	char ch;
-	inputFile.get(ch);
 	if (ch == '/')
 	{
 		inputFile.get(ch);
@@ -77,15 +59,14 @@ string ReadWord(ifstream & inputFile, bool & isReadEof)
 			}
 		}
 	}
-	if (ch == '{')
+	else if (ch == '{')
 	{
 		while (ch != '}')
 		{
 			inputFile.get(ch);
 		}
 	}
-
-	if (ch == '\'')
+	else if (ch == '\'')
 	{
 		inputFile.get(ch);
 		while (ch != '\'')
@@ -93,6 +74,14 @@ string ReadWord(ifstream & inputFile, bool & isReadEof)
 			inputFile.get(ch);
 		}
 	}
+}
+
+string ReadWord(ifstream & inputFile, bool & isReadEof)
+{
+	string word = "";
+	char ch;
+	inputFile.get(ch);
+	HandlingExceptions(inputFile, ch);
 	while (ch != ' ')
 	{
 		if ((ch == '\r') || (ch == '\n'))
@@ -127,6 +116,7 @@ int main()
 	stek *p = NULL;
 
 	bool isReadEof = false;
+	string wordFromStack;
 	while (!isReadEof)
 	{
 		string word = ReadWord(inputFile, isReadEof);
@@ -140,11 +130,27 @@ int main()
 			}
 			else if (CompareStrings(opt[i].endOperator, word))
 			{
-				cout << word << endl;
-
+				if (p != NULL)
+				{
+					wordFromStack = pop(p);
+				}
+				else
+				{
+					cout << "Validation FAILED!!!" << endl;
+					return 1;
+				}
 			}
 
 		}
+	}
+	if (p == NULL)
+	{
+		cout << "Validation PASSED!!!" << endl;
+	}
+	else
+	{
+		cout << "Validation FAILED!!!" << endl;
+		return 1;
 	}
 	//push(p, "BEGIN");
 	//pop(p);
