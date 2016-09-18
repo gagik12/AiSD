@@ -1,11 +1,11 @@
-/*           Р”РћР›Р“РђРќРћР’ Р’РђР”РРњ РќРРљРћР›РђР•Р’РР§
-                   Р’РђР РРђРќРў 27
-РџСЂРѕРіСЂР°РјРјР°  РЅР° РџРђРЎРљРђР›Р• РІРєР»СЋС‡Р°РµС‚ С‚Р°РєРёРµ СЃРѕС‡РµС‚Р°РЅРёСЏ РєР»СЋС‡РµРІС‹С…
-СЃР»РѕРІ,  РєР°Рє  REPEAT..UNTIL  Рё   BEGIN..END.   РќРµРєРѕС‚РѕСЂС‹Рµ   С‡Р°СЃС‚Рё
-РїСЂРѕРіСЂР°РјРјС‹  РјРѕРіСѓС‚ Р±С‹С‚СЊ Р·Р°РєРѕРјРјРµРЅС‚РёСЂРѕРІР°РЅС‹,  Р° РґСЂСѓРіР°СЏ С‡Р°СЃС‚СЊ С‚РµРєСЃС‚Р°
-РјРѕР¶РµС‚ РїСЂРµРґСЃС‚Р°РІР»СЏС‚СЊ РёР· СЃРµР±СЏ РєРѕРЅСЃС‚Р°РЅС‚С‹ РІ  Р°РїРѕСЃС‚СЂРѕС„Р°С….  РўСЂРµР±СѓРµС‚СЃСЏ
-РїСЂРѕРІРµСЂРёС‚СЊ РїСЂР°РІРёР»СЊРЅРѕСЃС‚СЊ РІР»РѕР¶РµРЅРЅРѕСЃС‚Рё РґР°РЅРЅС‹С… РєРѕРЅСЃС‚СЂСѓРєС†РёР№ СЃ СѓС‡РµС‚РѕРј
-РґРѕРїСѓСЃС‚РёРјРѕСЃС‚Рё РІР·Р°РёРјРЅС‹С… РІР»РѕР¶РµРЅРёР№ (11).*/
+/*           ДОЛГАНОВ ВАДИМ НИКОЛАЕВИЧ
+                   ВАРИАНТ 27
+Программа  на ПАСКАЛЕ включает такие сочетания ключевых
+слов,  как  REPEAT..UNTIL  и   BEGIN..END.   Некоторые   части
+программы  могут быть закомментированы,  а другая часть текста
+может представлять из себя константы в  апострофах.  Требуется
+проверить правильность вложенности данных конструкций с учетом
+допустимости взаимных вложений (11).*/
 
 
 #include <iostream>
@@ -46,11 +46,11 @@ vector<Operator> InitOperator()
 	return opt;
 }
 
-void HandlingExceptions(ifstream & inputFile, char ch)
+void HandlingExceptions(ifstream & inputFile, char & ch)
 {
 	if (ch == '/')
 	{
-		inputFile.get(ch);
+		//inputFile.get(ch);
 		if (ch == '/')
 		{
 			while (ch != '\n')
@@ -104,17 +104,39 @@ int CompareStrings(std::string const& a, std::string const& b)
 	return !(strcmp(a.c_str(), b.c_str()));
 }
 
-int main()
+bool IsEmpty(ifstream& pFile)
 {
-	ifstream inputFile("input.txt");
-	if (!inputFile.is_open())
+	return pFile.peek() == ifstream::traits_type::eof();
+}
+
+
+ifstream OpenFile(std::string const& fileName)
+{
+	ifstream file(fileName);
+	if (!file.is_open())
 	{
 		cout << "File not open!!!";
+		exit(1);
+	}
+	if (IsEmpty(file))
+	{
+		cout << "Empty file!!!";
+		exit(1);
+	}
+	return file;
+}
+
+int main(int argc, char *argv[])
+{
+	if (argc != 2)
+	{
+		cout << "Invalid arguments count\n"
+			<< "Usage: radix.exe <File name>\n";
 		return 1;
 	}
+	ifstream inputFile = OpenFile(argv[1]);
 	vector<Operator> opt = InitOperator();
 	stek *p = NULL;
-
 	bool isReadEof = false;
 	string wordFromStack;
 	while (!isReadEof)
@@ -125,7 +147,6 @@ int main()
 			if (CompareStrings(opt[i].beginOperator, word))
 			{
 				push(p, word);
-				cout << word << endl;
 				break;
 			}
 			else if (CompareStrings(opt[i].endOperator, word))
@@ -135,13 +156,13 @@ int main()
 					wordFromStack = pop(p);
 					if (!(CompareStrings(wordFromStack, opt[i].beginOperator)))
 					{
-						cout << "Validation FAILED!!!" << endl;
+						cout << "Validation FAILED1!!!" << endl;
 						return 1;
 					}
 				}
 				else
 				{
-					cout << "Validation FAILED!!!" << endl;
+					cout << "Validation FAILED2!!!" << endl;
 					return 1;
 				}
 			}
@@ -154,10 +175,8 @@ int main()
 	}
 	else
 	{
-		cout << "Validation FAILED!!!" << endl;
+		cout << "Validation FAILED3!!!" << endl;
 		return 1;
 	}
-	//push(p, "BEGIN");
-	//pop(p);
 	return 0;
 }

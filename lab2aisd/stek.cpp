@@ -19,3 +19,4 @@ string pop(stek* &NEXT)
 	delete MyStack;
 	return temp;
 }
+
