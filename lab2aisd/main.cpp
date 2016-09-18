@@ -1,11 +1,11 @@
-/*           ДОЛГАНОВ ВАДИМ НИКОЛАЕВИЧ
-                   ВАРИАНТ 27
-Программа  на ПАСКАЛЕ включает такие сочетания ключевых
-слов,  как  REPEAT..UNTIL  и   BEGIN..END.   Некоторые   части
-программы  могут быть закомментированы,  а другая часть текста
-может представлять из себя константы в  апострофах.  Требуется
-проверить правильность вложенности данных конструкций с учетом
-допустимости взаимных вложений (11).*/
+/*           Р”РћР›Р“РђРќРћР’ Р’РђР”РРњ РќРРљРћР›РђР•Р’РР§
+                   Р’РђР РРђРќРў 27
+РџСЂРѕРіСЂР°РјРјР°  РЅР° РџРђРЎРљРђР›Р• РІРєР»СЋС‡Р°РµС‚ С‚Р°РєРёРµ СЃРѕС‡РµС‚Р°РЅРёСЏ РєР»СЋС‡РµРІС‹С…
+СЃР»РѕРІ,  РєР°Рє  REPEAT..UNTIL  Рё   BEGIN..END.   РќРµРєРѕС‚РѕСЂС‹Рµ   С‡Р°СЃС‚Рё
+РїСЂРѕРіСЂР°РјРјС‹  РјРѕРіСѓС‚ Р±С‹С‚СЊ Р·Р°РєРѕРјРјРµРЅС‚РёСЂРѕРІР°РЅС‹,  Р° РґСЂСѓРіР°СЏ С‡Р°СЃС‚СЊ С‚РµРєСЃС‚Р°
+РјРѕР¶РµС‚ РїСЂРµРґСЃС‚Р°РІР»СЏС‚СЊ РёР· СЃРµР±СЏ РєРѕРЅСЃС‚Р°РЅС‚С‹ РІ  Р°РїРѕСЃС‚СЂРѕС„Р°С….  РўСЂРµР±СѓРµС‚СЃСЏ
+РїСЂРѕРІРµСЂРёС‚СЊ РїСЂР°РІРёР»СЊРЅРѕСЃС‚СЊ РІР»РѕР¶РµРЅРЅРѕСЃС‚Рё РґР°РЅРЅС‹С… РєРѕРЅСЃС‚СЂСѓРєС†РёР№ СЃ СѓС‡РµС‚РѕРј
+РґРѕРїСѓСЃС‚РёРјРѕСЃС‚Рё РІР·Р°РёРјРЅС‹С… РІР»РѕР¶РµРЅРёР№ (11).*/
 
 
 #include <iostream>
@@ -104,9 +104,9 @@ int CompareStrings(std::string const& a, std::string const& b)
 	return !(strcmp(a.c_str(), b.c_str()));
 }
 
-bool IsEmpty(ifstream& pFile)
+bool IsEmpty(ifstream& file)
 {
-	return pFile.peek() == ifstream::traits_type::eof();
+	return file.peek() == std::ifstream::traits_type::eof();
 }
 
 
@@ -156,13 +156,13 @@ int main(int argc, char *argv[])
 					wordFromStack = pop(p);
 					if (!(CompareStrings(wordFromStack, opt[i].beginOperator)))
 					{
-						cout << "Validation FAILED1!!!" << endl;
+						cout << "Validation FAILED!!!" << endl;
 						return 1;
 					}
 				}
 				else
 				{
-					cout << "Validation FAILED2!!!" << endl;
+					cout << "Validation FAILED!!!" << endl;
 					return 1;
 				}
 			}
@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		cout << "Validation FAILED3!!!" << endl;
+		cout << "Validation FAILED!!!" << endl;
 		return 1;
 	}
 	return 0;
