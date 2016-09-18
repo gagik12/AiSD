@@ -16,6 +16,10 @@ set PROGRAM="%~1"
 
 %PROGRAM% input\in8.txt > output\out8.txt
 
+%PROGRAM% input\in9.txt > output\out9.txt
+
+%PROGRAM% input\in10.txt > output\out10.txt
+
 echo Program testing succeeded
 exit 0
 

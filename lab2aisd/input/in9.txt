@@ -1,0 +1,4 @@
+BEGIN
+  begin
+  end
+end.
