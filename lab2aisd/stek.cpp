@@ -2,17 +2,17 @@
 
 using namespace std;
 
-void push(stek* &NEXT, const string & VALUE)
+void push(Stek* &NEXT, const string & VALUE)
 {
-	stek *MyStack = new stek;
+	Stek *MyStack = new Stek;
 	MyStack->value = VALUE;
 	MyStack->next = NEXT;
 	NEXT = MyStack;
 }
 
-string pop(stek* &NEXT)
+string pop(Stek* &NEXT)
 {
-	stek *MyStack = NEXT;
+	Stek *MyStack = NEXT;
 	string temp = NEXT->value;
 
 	NEXT = NEXT->next;

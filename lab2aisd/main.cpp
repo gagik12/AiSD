@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
 	}
 	ifstream inputFile = OpenFile(argv[1]);
 	vector<Operator> opt = InitOperator();
-	stek *p = NULL;
+	Stek *stek = NULL;
 	bool isReadEof = false;
 	string wordFromStack;
 	while (!isReadEof)
@@ -147,14 +147,14 @@ int main(int argc, char *argv[])
 		{
 			if (CompareStrings(opt[i].beginOperator, word))
 			{
-				push(p, word);
+				push(stek, word);
 				break;
 			}
 			else if (CompareStrings(opt[i].endOperator, word))
 			{
-				if (p != NULL)
+				if (stek != NULL)
 				{
-					wordFromStack = pop(p);
+					wordFromStack = pop(stek);
 					if (!(CompareStrings(wordFromStack, opt[i].beginOperator)))
 					{
 						cout << "Validation FAILED!!!" << endl;
@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
 
 		}
 	}
-	if (p == NULL)
+	if (stek == NULL)
 	{
 		cout << "Validation PASSED!!!" << endl;
 	}

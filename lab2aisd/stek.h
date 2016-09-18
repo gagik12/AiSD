@@ -3,11 +3,11 @@
 #include <fstream>
 #include <iostream>
 
-struct stek
+struct Stek
 {
 	std::string value;
-	struct stek *next;
+	struct Stek *next;
 };
 
-void push(stek* &NEXT, const std::string & VALUE);
-std::string pop(stek* &NEXT);
+void push(Stek* &NEXT, const std::string & VALUE);
+std::string pop(Stek* &NEXT);
