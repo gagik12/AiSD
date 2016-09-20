@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void push(Stek* &NEXT, const string & VALUE)
+void Push(Stek* &NEXT, const string & VALUE)
 {
 	Stek *MyStack = new Stek;
 	MyStack->value = VALUE;
@@ -10,7 +10,7 @@ void push(Stek* &NEXT, const string & VALUE)
 	NEXT = MyStack;
 }
 
-string pop(Stek* &NEXT)
+string Pop(Stek* &NEXT)
 {
 	Stek *MyStack = NEXT;
 	string temp = NEXT->value;

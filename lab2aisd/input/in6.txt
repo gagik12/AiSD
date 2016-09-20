@@ -7,6 +7,12 @@ BEGIN // COMMENT BEGIN
     REPEAT
       CH := 'END';
       CH := ' END ';
+      ENDS := 's';
     UNTIL
+{ BEGIN' 123 '
+
+
+
+}
   END
 END

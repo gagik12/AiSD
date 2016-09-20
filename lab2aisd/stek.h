@@ -9,5 +9,5 @@ struct Stek
 	struct Stek *next;
 };
 
-void push(Stek* &NEXT, const std::string & VALUE);
-std::string pop(Stek* &NEXT);
+void Push(Stek* &NEXT, const std::string & VALUE);
+std::string Pop(Stek* &NEXT);
