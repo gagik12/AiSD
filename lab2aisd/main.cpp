@@ -46,7 +46,7 @@ vector<Operator> InitOperator()
 	return opt;
 }
 
-void HandlingExceptions(ifstream & inputFile, char & ch)
+void HandlingExceptions(ifstream & inputFile, char & ch, int & position)
 {
 	if (ch == '/')
 	{
@@ -76,12 +76,12 @@ void HandlingExceptions(ifstream & inputFile, char & ch)
 	}
 }
 
-string ReadWord(ifstream & inputFile, bool & isReadEof)
+string ReadWord(ifstream & inputFile, bool & isReadEof, int & position)
 {
 	string word = "";
 	char ch;
 	inputFile.get(ch);
-	HandlingExceptions(inputFile, ch);
+	HandlingExceptions(inputFile, ch, position);
 	while (ch != ' ')
 	{
 		if ((ch == '\r') || (ch == '\n'))
@@ -127,12 +127,17 @@ ifstream OpenFile(std::string const& fileName)
 	return file;
 }
 
+void PrintResult(int position)
+{
+	cout << "Validation FAILED!!!" << endl;
+	cout << "Error: " << position << " line";
+}
+
 int main(int argc, char *argv[])
 {
 	if (argc != 2)
 	{
-		cout << "Invalid arguments count\n"
-			<< "Usage: radix.exe <File name>\n";
+		cout << "Invalid arguments count\n";
 		return 1;
 	}
 	ifstream inputFile = OpenFile(argv[1]);
@@ -140,14 +145,16 @@ int main(int argc, char *argv[])
 	Stek *stek = NULL;
 	bool isReadEof = false;
 	string wordFromStack;
+	int position = 0;
 	while (!isReadEof)
 	{
-		string word = ReadWord(inputFile, isReadEof);
+		string word = ReadWord(inputFile, isReadEof, position);		
 		for (int i = 0; i != opt.size(); i++)
 		{
 			if (CompareStrings(opt[i].beginOperator, word))
 			{
 				Push(stek, word);
+				++position;
 				break;
 			}
 			else if (CompareStrings(opt[i].endOperator, word))
@@ -155,15 +162,16 @@ int main(int argc, char *argv[])
 				if (stek != NULL)
 				{
 					wordFromStack = Pop(stek);
+					++position;
 					if (!(CompareStrings(wordFromStack, opt[i].beginOperator)))
 					{
-						cout << "Validation FAILED!!!" << endl;
+						PrintResult(position);
 						return 1;
 					}
 				}
 				else
 				{
-					cout << "Validation FAILED!!!" << endl;
+					PrintResult(position);
 					return 1;
 				}
 			}
@@ -176,7 +184,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		cout << "Validation FAILED!!!" << endl;
+		PrintResult(position);
 		return 1;
 	}
 	return 0;
