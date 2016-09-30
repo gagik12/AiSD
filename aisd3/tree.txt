@@ -1,0 +1,14 @@
+A and
+.B or
+..E
+..F and
+...M or
+....O
+....P
+....R
+...N
+.C or
+..K
+.D or
+..G
+..H
