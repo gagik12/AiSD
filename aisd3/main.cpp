@@ -9,6 +9,8 @@ struct Tree
 	std::vector<Tree> *sons; // сыновья 
 };
 
+
+
 int main()
 {
 
