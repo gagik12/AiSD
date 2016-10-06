@@ -138,20 +138,44 @@ int read_from_file(ifstream & F, Tree **r)
 	return 0;
 }
 
+void OutputSons(Tree *p, int urovFath)
+{
+	int i;
+	string urov;
+	string name = "";
+
+	if (p)
+	{
+		if (urovFath + 1 == p->urov)
+		{
+			for (i = 0; i < p->urov; i++) urov += '.';
+			cout << urov;
+			cout << p->name << " ";
+			cout << p->vertex << endl;
+		}
+		OutputSons(p->left, urovFath);
+		OutputSons(p->right, urovFath);
+	}
+}
+
 void back_from_bin(Tree *p)
 {
 	int i;
 	string urov;
 	string name = "";
+
 	if (p)
 	{
 		for (i = 0; i < p->urov; i++) urov += '.';
 		cout << urov;
 		cout << p->name << " ";
 		cout << p->vertex << endl;
-		
-		back_from_bin(p->left);
-		back_from_bin(p->right);
+		if (p->vertex == "and")
+		{
+			OutputSons(p, p->urov);
+		}
+		/*back_from_bin(p->left);
+		back_from_bin(p->right);*/
 	}
 
 }
