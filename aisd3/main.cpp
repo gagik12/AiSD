@@ -1,6 +1,7 @@
 
 #include "stdafx.h"   
 #include <fstream>
+#include <iostream>
 #include <string>
 const int DL = 20;          // максимальная длина
 
@@ -8,8 +9,9 @@ using namespace std;
 
 struct Tree
 {
-	char name[DL];
+	string name;
 	int urov;
+	string vertex;   // Вершина И, ИЛИ
 	Tree *fath;         // отец в исходном дереве
 	Tree *left;
 	Tree *right;
@@ -44,6 +46,39 @@ int main(int argc, char* argv[])
 	back_from_bin(root);
 }
 
+string ReadName(char buf[DL], int k, bool &isVertex)
+{
+	string name = "";
+	while (buf[k] != '\0')
+	{
+		if (buf[k] != ' ')
+		{
+			name += buf[k];
+		}
+		else
+		{
+			isVertex = true;
+			break;
+		}
+		k++;
+	}
+	return name;
+}
+
+string ReadVertex(char buf[DL], int k, bool isVertex)
+{
+	string vertex;
+	if (isVertex)
+	{
+		while (buf[k] != '\0')
+		{
+			vertex += buf[k];
+			k++;
+		}
+	}
+	return vertex;
+}
+
 int read_from_file(ifstream & F, Tree **r)
 {
 	char buf[DL];
@@ -51,15 +86,38 @@ int read_from_file(ifstream & F, Tree **r)
 	Tree *p, *q, *t;       // *root = 0 
 	m = 0;                 // уровень вершины
 	t = 0;
+
+	bool isVertex;
+
 	while (!F.eof())
 	{
 		F.getline(buf, DL);
+
+		string vertex = "";
 		len = strlen(buf);
+		cout << "g" << endl;
 		if (len == 0) break;            // если конец файла в следующей строке
 		k = 0;
 		while (buf[k] == '.') k++;     // k-уровень вершины
 		p = new Tree;
-		strncpy_s(p->name, &buf[k], len - k + 1);  // 0-(k-1) - точки, (k-1)-(len-1) - имя, \0 - конец строки
+		isVertex = false;
+		/*int l = k;
+		while (buf[l] != '\0')
+		{
+			if (buf[l] != ' ')
+			{
+				name += buf[l];
+			}
+			else
+			{
+				isVertex = true;
+				break;
+			}
+			l++;
+		}*/
+		p->name = ReadName(buf, k, isVertex);
+		p->vertex = ReadVertex(buf, k, isVertex);
+
 		buf[0] = '\0';                  // если конец файла в следующей строке
 		p->urov = k;
 		p->left = 0;
