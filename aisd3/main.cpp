@@ -19,9 +19,6 @@ struct Tree
 
 int read_from_file(ifstream & F, Tree **r);  // чтение из файла, формирование дерева
 void back_from_bin(Tree *p);            // выдача исходное дерева из бинарного 
-void print_down_bin(Tree *p, int lev);  // выдача бинарного сверху вниз
-void print_up_bin(Tree *p, int lev);    // выдача бинарного снизу вверх
-void print_right_bin(Tree *p, int lev); // выдача бинарного слева направо
 
 int main(int argc, char* argv[])
 {
@@ -46,7 +43,7 @@ int main(int argc, char* argv[])
 	back_from_bin(root);
 }
 
-string ReadName(char buf[DL], int k, bool &isVertex)
+string ReadName(char buf[DL], int &k, bool &isVertex)
 {
 	string name = "";
 	while (buf[k] != '\0')
@@ -70,6 +67,7 @@ string ReadVertex(char buf[DL], int k, bool isVertex)
 	string vertex;
 	if (isVertex)
 	{
+		k++;
 		while (buf[k] != '\0')
 		{
 			vertex += buf[k];
@@ -95,28 +93,15 @@ int read_from_file(ifstream & F, Tree **r)
 
 		string vertex = "";
 		len = strlen(buf);
-		cout << "g" << endl;
 		if (len == 0) break;            // если конец файла в следующей строке
 		k = 0;
 		while (buf[k] == '.') k++;     // k-уровень вершины
 		p = new Tree;
+
 		isVertex = false;
-		/*int l = k;
-		while (buf[l] != '\0')
-		{
-			if (buf[l] != ' ')
-			{
-				name += buf[l];
-			}
-			else
-			{
-				isVertex = true;
-				break;
-			}
-			l++;
-		}*/
-		p->name = ReadName(buf, k, isVertex);
-		p->vertex = ReadVertex(buf, k, isVertex);
+		int l = k;
+		p->name = ReadName(buf, l, isVertex);
+		p->vertex = ReadVertex(buf, l, isVertex);
 
 		buf[0] = '\0';                  // если конец файла в следующей строке
 		p->urov = k;
@@ -155,20 +140,23 @@ int read_from_file(ifstream & F, Tree **r)
 
 void back_from_bin(Tree *p)
 {
-	int i, j;
-	char st[DL];
+	int i;
+	string urov;
+	string name = "";
 	if (p)
 	{
-		for (i = 0; i < p->urov; i++) st[i] = '.';
-		j = 0;
-		while (st[i++] = (p->name)[j++]);
-		printf("%s\n", st);
+		for (i = 0; i < p->urov; i++) urov += '.';
+		cout << urov;
+		cout << p->name << " ";
+		cout << p->vertex << endl;
+		
 		back_from_bin(p->left);
 		back_from_bin(p->right);
 	}
+
 }
 
-void print_right_bin(Tree *p, int level)
+/*void print_right_bin(Tree *p, int level)
 {
 	if (p)
 	{
@@ -203,3 +191,4 @@ void print_down_bin(Tree *p, int level)
 		print_down_bin(p->right, level + 1);
 	}
 }
+*/
